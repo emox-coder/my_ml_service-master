@@ -1,0 +1,28 @@
+{
+  "best_model": "HistGradientBoosting",
+  "currency": "PHP",
+  "trained_at_utc": "2026-05-20T13:11:23.078787+00:00",
+  "feature_columns": [
+    "Location",
+    "FloorAreaSqm",
+    "LotSizeSqm",
+    "Bedrooms",
+    "Bathrooms",
+    "ParkingSpaces",
+    "PropertyAge",
+    "Condition",
+    "PropertyType",
+    "NeighborhoodRating",
+    "DistanceToCBDKm"
+  ],
+  "cv": {
+    "r2_mean": 0.9542185921541936,
+    "r2_std": 0.013978835946400672,
+    "mae_mean": 3457536.2891828744,
+    "mae_std": 176309.93255842288
+  },
+  "holdout_test": {
+    "r2": 0.961751446704214,
+    "mae": 2953969.7669237615
+  }
+}

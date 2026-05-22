@@ -1,0 +1,113 @@
+{% extends 'predictions/base.html' %}
+{% load humanize %}
+
+{% block title %}Prediction Result - House Price Prediction{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-check-circle me-2"></i>Prediction Result
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="result-section text-center mb-4">
+                        <h3 class="mb-3">Estimated House Price</h3>
+                        <div class="price-display">
+                            ₱{{ prediction.predicted_price|floatformat:2|intcomma }}
+                        </div>
+                        {% if lower_price and upper_price %}
+                            <div class="mt-2 text-muted">
+                                Estimated range: <strong>₱{{ lower_price|floatformat:0|intcomma }}</strong>
+                                – <strong>₱{{ upper_price|floatformat:0|intcomma }}</strong>
+                                <div class="small">
+                                    Range is based on average model error (MAE).
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if model_name %}
+                            <div class="small text-muted mt-2">
+                                Model: {{ model_name }}{% if trained_at_utc %} • Trained: {{ trained_at_utc }}{% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="details-section">
+                        <h5 class="mb-3">Property Details</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-map-marker-alt me-2 text-primary"></i>Location:</strong>
+                                {{ prediction.location }}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-ruler-combined me-2 text-primary"></i>Floor Area (sqm):</strong>
+                                {{ prediction.square_feet|intcomma }}
+                            </div>
+                            {% if prediction.lot_size_sqm %}
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-vector-square me-2 text-primary"></i>Lot Size (sqm):</strong>
+                                {{ prediction.lot_size_sqm|intcomma }}
+                            </div>
+                            {% endif %}
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-bed me-2 text-primary"></i>Bedrooms:</strong>
+                                {{ prediction.bedrooms }}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-bath me-2 text-primary"></i>Bathrooms:</strong>
+                                {{ prediction.bathrooms }}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-car me-2 text-primary"></i>Parking Spaces:</strong>
+                                {{ prediction.parking_spaces }}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-calendar me-2 text-primary"></i>Year Built:</strong>
+                                {{ prediction.year_built }}
+                            </div>
+                            {% if prediction.property_type %}
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-home me-2 text-primary"></i>Property Type:</strong>
+                                {{ prediction.property_type }}
+                            </div>
+                            {% endif %}
+                            {% if prediction.condition %}
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-tools me-2 text-primary"></i>Condition:</strong>
+                                {{ prediction.condition }}
+                            </div>
+                            {% endif %}
+                            {% if prediction.neighborhood_rating %}
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-star me-2 text-primary"></i>Neighborhood Rating:</strong>
+                                {{ prediction.neighborhood_rating }}/10
+                            </div>
+                            {% endif %}
+                            {% if prediction.distance_to_cbd_km %}
+                            <div class="col-md-6 mb-2">
+                                <strong><i class="fas fa-route me-2 text-primary"></i>Distance to CBD:</strong>
+                                {{ prediction.distance_to_cbd_km|floatformat:1 }} km
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="actions-section mt-4">
+                        <div class="d-flex gap-2 justify-content-center">
+                            <a href="{% url 'predict' %}" class="btn btn-primary">
+                                <i class="fas fa-redo me-2"></i>New Prediction
+                            </a>
+                            <a href="{% url 'history' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-history me-2"></i>View History
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'predictions/base.html' %}
+{% load humanize %}
+
+{% block title %}Profile - House Price Prediction{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <div class="profile-avatar mb-3">
+                        <i class="fas fa-user-circle fa-5x text-primary"></i>
+                    </div>
+                    <h4>{{ user.username }}</h4>
+                    <p class="text-muted">{{ user.email }}</p>
+                    <hr>
+                    <div class="text-start">
+                        <p><strong><i class="fas fa-calendar me-2"></i>Member Since:</strong> {{ user.date_joined|date:"F Y" }}</p>
+                        <p><strong><i class="fas fa-calculator me-2"></i>Total Predictions:</strong> {{ total_predictions }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Prediction Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card text-center p-3 bg-light rounded">
+                                <h6 class="text-muted mb-1">Average Price</h6>
+                                <h4 class="text-primary">₱{{ avg_price|floatformat:0|intcomma }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card text-center p-3 bg-light rounded">
+                                <h6 class="text-muted mb-1">Highest Price</h6>
+                                <h4 class="text-success">₱{{ max_price|floatformat:0|intcomma }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card text-center p-3 bg-light rounded">
+                                <h6 class="text-muted mb-1">Lowest Price</h6>
+                                <h4 class="text-danger">₱{{ min_price|floatformat:0|intcomma }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>Recent Predictions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_predictions %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Location</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for prediction in recent_predictions %}
+                                        <tr>
+                                            <td>{{ prediction.created_at|date:"M d, Y" }}</td>
+                                            <td>{{ prediction.location }}</td>
+                                            <td class="price-cell">₱{{ prediction.predicted_price|floatformat:0|intcomma }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'history' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-list me-2"></i>View All History
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <p class="text-muted">No predictions yet</p>
+                            <a href="{% url 'predict' %}" class="btn btn-primary">
+                                <i class="fas fa-calculator me-2"></i>Start Predicting
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

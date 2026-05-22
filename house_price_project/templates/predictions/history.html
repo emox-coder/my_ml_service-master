@@ -1,0 +1,123 @@
+{% extends 'predictions/base.html' %}
+{% load humanize %}
+
+{% block title %}Prediction History - House Price Prediction{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Prediction History
+                    </h2>
+                </div>
+                <div class="card-body">
+                    {% if predictions %}
+                        <div class="d-flex justify-content-end mb-3">
+                            <a href="{% url 'history_export' %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-file-csv me-2"></i>Export CSV
+                            </a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Location</th>
+                                        <th>Area (sqm)</th>
+                                        <th>Lot (sqm)</th>
+                                        <th>Beds</th>
+                                        <th>Baths</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for prediction in predictions %}
+                                        <tr>
+                                            <td>{{ prediction.created_at|date:"M d, Y" }}</td>
+                                            <td>{{ prediction.location }}</td>
+                                            <td>{{ prediction.square_feet|intcomma }}</td>
+                                            <td>{% if prediction.lot_size_sqm %}{{ prediction.lot_size_sqm|intcomma }}{% else %}-{% endif %}</td>
+                                            <td>{{ prediction.bedrooms }}</td>
+                                            <td>{{ prediction.bathrooms }}</td>
+                                            <td class="price-cell">₱{{ prediction.predicted_price|floatformat:0|intcomma }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+                            <p class="text-muted">No predictions yet. Start predicting house prices!</p>
+                            <a href="{% url 'predict' %}" class="btn btn-primary">
+                                <i class="fas fa-calculator me-2"></i>Make Your First Prediction
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Price Trends
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if predictions %}
+                        <canvas id="priceChart"></canvas>
+                    {% else %}
+                        <p class="text-muted text-center">No data to display</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if predictions %}
+<script>
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    const priceChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ labels|safe }},
+            datasets: [{
+                label: 'Predicted Price',
+                data: {{ prices|safe }},
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        callback: function(value) {
+                            return '₱' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}

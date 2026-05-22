@@ -1,0 +1,101 @@
+{% extends 'predictions/base.html' %}
+
+{% block title %}Home - House Price Prediction{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Predict House Prices with AI</h1>
+                <p class="lead mb-4">
+                    Use our machine learning-powered system to estimate house prices based on location, 
+                    size, and other features. Get accurate predictions in seconds!
+                </p>
+                <div class="d-flex gap-3">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'predict' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-calculator me-2"></i>Start Predicting
+                        </a>
+                    {% else %}
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Get Started
+                        </a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6 mt-5 mt-lg-0">
+                <div class="hero-image">
+                    <i class="fas fa-home fa-10x text-white opacity-25"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="feature-card text-center p-4">
+                <div class="feature-icon mb-3">
+                    <i class="fas fa-brain fa-3x text-primary"></i>
+                </div>
+                <h4>Machine Learning</h4>
+                <p class="text-muted">Powered by advanced ML algorithms for accurate predictions</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="feature-card text-center p-4">
+                <div class="feature-icon mb-3">
+                    <i class="fas fa-bolt fa-3x text-primary"></i>
+                </div>
+                <h4>Instant Results</h4>
+                <p class="text-muted">Get price predictions in real-time with our fast system</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="feature-card text-center p-4">
+                <div class="feature-icon mb-3">
+                    <i class="fas fa-chart-line fa-3x text-primary"></i>
+                </div>
+                <h4>Track History</h4>
+                <p class="text-muted">View and analyze your prediction history with charts</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="mb-4">How It Works</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h5>Enter House Details</h5>
+                        <p>Provide information about location, size, bedrooms, and more</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h5>AI Analysis</h5>
+                        <p>Our ML model analyzes the data using trained algorithms</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h5>Get Prediction</h5>
+                        <p>Receive an estimated price for the property</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
